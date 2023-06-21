@@ -1,12 +1,12 @@
-import 'package:advicer/2_application/core/services/theme_service.dart';
-import 'package:advicer/2_application/pages/advicer/widgets/advice_field.dart';
-import 'package:advicer/2_application/pages/advicer/widgets/custom_button.dart';
-import 'package:advicer/2_application/pages/advicer/widgets/error_message.dart';
+import 'package:adviser/2_application/core/services/theme_service.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/advice_field.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/custom_button.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AdvicerPage extends StatelessWidget {
-  const AdvicerPage({super.key});
+class AdviserPage extends StatelessWidget {
+  const AdviserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class AdvicerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Advicer',
+          'Adviser',
           style: themeData.textTheme.headlineMedium,
         ),
         centerTitle: true,

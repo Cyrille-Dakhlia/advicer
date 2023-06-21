@@ -1,5 +1,5 @@
-name: advicer
-description: A new Flutter project.
+name: adviser
+description: A Flutter app giving advices, build following clean architecture concepts.
 publish_to: 'none'
 version: 0.1.0
 
