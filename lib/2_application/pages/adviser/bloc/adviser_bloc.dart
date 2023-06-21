@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:adviser/1_domain/entities/advice_entity.dart';
+import 'package:adviser/1_domain/usecases/advice_usecases.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,16 +12,13 @@ class AdviserBloc extends Bloc<AdviserEvent, AdviserState> {
   AdviserBloc() : super(AdviserInitial()) {
     on<AdviserRequestPressed>(_onRequestPressed);
   }
+  final AdviceUseCases adviceUseCases = AdviceUseCases();
 
   FutureOr<void> _onRequestPressed(event, emit) async {
     emit(AdviserLoadInProgress());
-    // we temporarily simulate business logic here
-    debugPrint('Retrieving advice...');
-    await Future.delayed(const Duration(seconds: 3));
-    debugPrint('Advice retrieved.');
 
-    emit(AdviserLoadSuccess(
-        advice: 'Fake advice fasely retrieved from fake API.'));
+    final AdviceEntity adviceEntity = await adviceUseCases.getAdvice();
+    emit(AdviserLoadSuccess(advice: adviceEntity.advice));
 
     // emit(AdviserLoadFailure(message: 'Fake error message.'));
   }
