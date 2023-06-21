@@ -45,25 +45,18 @@ class AdviserPage extends StatelessWidget {
             Expanded(
               child: Center(
                 child: BlocBuilder<AdviserBloc, AdviserState>(
-                  builder: (context, state) {
-                    if (state is AdviserInitial) {
-                      return Text(
+                  builder: (context, state) => switch (state) {
+                    AdviserInitial() => Text(
                         'Press the button to get your first advice.',
                         style: themeData.textTheme.bodyMedium,
-                      );
-                    } else if (state is AdviserLoadInProgress) {
-                      return CircularProgressIndicator(
+                      ),
+                    AdviserLoadInProgress() => CircularProgressIndicator(
                         color: themeData.colorScheme.secondary,
-                      );
-                    } else if (state is AdviserLoadSuccess) {
-                      return AdviceField(advice: state.advice);
-                    } else if (state is AdviserLoadFailure) {
-                      debugPrint(state.message);
-                      return const ErrorMessage(
-                          message: 'Hmmm, something\'s got wrong!');
-                    } else {
-                      return const SizedBox.shrink();
-                    }
+                      ),
+                    AdviserLoadSuccess(advice: var advice) =>
+                      AdviceField(advice: advice),
+                    AdviserLoadFailure(message: var message) =>
+                      ErrorMessage(message: message),
                   },
                 ),
               ),
