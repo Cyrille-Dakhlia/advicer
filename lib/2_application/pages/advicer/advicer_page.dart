@@ -1,4 +1,7 @@
 import 'package:advicer/2_application/core/services/theme_service.dart';
+import 'package:advicer/2_application/pages/advicer/widgets/advice_field.dart';
+import 'package:advicer/2_application/pages/advicer/widgets/custom_button.dart';
+import 'package:advicer/2_application/pages/advicer/widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +25,28 @@ class AdvicerPage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Placeholder(),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: AdviceField(
+                    advice:
+                        'Therefore do not worry about tomorrow, for tomorrow will worry about its own things. Sufficient for the day is its own trouble.'),
+                // child: ErrorMessage(message: 'oups, something\' got wrong!'),
+/*                 child: CircularProgressIndicator(
+                  color: themeData.colorScheme.secondary,
+                ),
+ */
+              ),
+            ),
+            SizedBox(height: 100),
+            CustomButton(),
+            SizedBox(height: 30),
+          ],
+        ),
+      ),
     );
   }
 }
