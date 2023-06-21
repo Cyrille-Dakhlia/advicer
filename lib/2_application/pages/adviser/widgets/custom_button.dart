@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key});
+  final void Function() onPressed;
+  const CustomButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return ElevatedButton(
-      onPressed: () => debugPrint('custom button pressed'),
+      onPressed: onPressed,
       style: ButtonStyle(
         shape: MaterialStatePropertyAll(
           RoundedRectangleBorder(
