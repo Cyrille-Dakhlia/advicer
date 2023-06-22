@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:adviser/1_domain/failures/failures.dart';
+import 'package:adviser/1_domain/usecases/advice_usecases.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,21 +8,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'adviser_event.dart';
 part 'adviser_state.dart';
 
+const serverFailureMessage = 'API Error, please try again.';
+const cacheFailureMessage = 'Cache failed, please try again.';
+const generalFailureMessage = 'Something\'s gone wrong, please try again.';
+
 class AdviserBloc extends Bloc<AdviserEvent, AdviserState> {
   AdviserBloc() : super(AdviserInitial()) {
     on<AdviserRequestPressed>(_onRequestPressed);
   }
+  final AdviceUseCases adviceUseCases = AdviceUseCases();
 
   FutureOr<void> _onRequestPressed(event, emit) async {
     emit(AdviserLoadInProgress());
-    // we temporarily simulate business logic here
-    debugPrint('Retrieving advice...');
-    await Future.delayed(const Duration(seconds: 3));
-    debugPrint('Advice retrieved.');
 
-    emit(AdviserLoadSuccess(
-        advice: 'Fake advice fasely retrieved from fake API.'));
+    final adviceEntityOrFailure = await adviceUseCases.getAdvice();
+    adviceEntityOrFailure.fold(
+      (adviceEntity) => emit(AdviserLoadSuccess(advice: adviceEntity.advice)),
+      (failure) =>
+          emit(AdviserLoadFailure(message: _mapFailureToMessage(failure))),
+    );
+  }
 
-    // emit(AdviserLoadFailure(message: 'Fake error message.'));
+  String _mapFailureToMessage(Failure failure) {
+    return switch (failure) {
+      ServerFailure() => serverFailureMessage,
+      CacheFailure() => cacheFailureMessage,
+      GeneralFailure() => generalFailureMessage,
+    };
   }
 }
