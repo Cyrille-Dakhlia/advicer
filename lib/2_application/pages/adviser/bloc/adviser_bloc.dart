@@ -13,15 +13,18 @@ const cacheFailureMessage = 'Cache failed, please try again.';
 const generalFailureMessage = 'Something\'s gone wrong, please try again.';
 
 class AdviserBloc extends Bloc<AdviserEvent, AdviserState> {
-  AdviserBloc() : super(AdviserInitial()) {
+  final AdviceUseCases _adviceUseCases;
+
+  AdviserBloc({required AdviceUseCases adviceUseCases})
+      : _adviceUseCases = adviceUseCases,
+        super(AdviserInitial()) {
     on<AdviserRequestPressed>(_onRequestPressed);
   }
-  final AdviceUseCases adviceUseCases = AdviceUseCases();
 
   FutureOr<void> _onRequestPressed(event, emit) async {
     emit(AdviserLoadInProgress());
 
-    final adviceEntityOrFailure = await adviceUseCases.getAdvice();
+    final adviceEntityOrFailure = await _adviceUseCases.getAdvice();
     adviceEntityOrFailure.fold(
       (adviceEntity) => emit(AdviserLoadSuccess(advice: adviceEntity.advice)),
       (failure) =>

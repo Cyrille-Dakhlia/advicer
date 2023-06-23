@@ -3,8 +3,12 @@ import 'package:adviser/2_application/pages/adviser/adviser_page.dart';
 import 'package:adviser/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:adviser/injection.dart' as di;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  di.setup();
+
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeService(),
     child: const MainApp(),
