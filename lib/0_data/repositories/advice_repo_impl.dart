@@ -6,8 +6,10 @@ import 'package:adviser/1_domain/repositories/advice_repo.dart';
 import 'package:dartz/dartz.dart';
 
 class AdviceRepoImpl implements AdviceRepo {
-  final AdviceRemoteDataSource _adviceRemoteDataSource =
-      AdviceRemoteDataSourceImpl();
+  final AdviceRemoteDataSource _adviceRemoteDataSource;
+
+  AdviceRepoImpl({required AdviceRemoteDataSource adviceRemoteDataSource})
+      : _adviceRemoteDataSource = adviceRemoteDataSource;
 
   @override
   Future<Either<AdviceEntity, Failure>> getAdviceFromDataSource() async {
