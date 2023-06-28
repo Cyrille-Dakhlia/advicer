@@ -42,21 +42,6 @@ void main() {
       });
     });
 
-    group('should make a single call to AdviceRemoteDataSource', () {
-      test('when calling getRandomAdviceFromApi', () async {
-        // GIVEN
-        final mock = MockAdviceRemoteDataSource();
-        final adviceRepo = AdviceRepoImpl(adviceRemoteDataSource: mock);
-
-        // WHEN
-        await adviceRepo.getAdviceFromDataSource();
-
-        // THEN
-        verify(mock.getRandomAdviceFromApi()).called(1);
-        verifyNoMoreInteractions(mock);
-      });
-    });
-
     group('should return right with', () {
       test('a ServerFailure when a ServerException occurs', () async {
         // GIVEN
@@ -101,6 +86,21 @@ void main() {
         expect(result.isRight(), true);
         expect(result, Right<AdviceEntity, Failure>(GeneralFailure()));
       });
+    });
+  });
+
+  group('should make a single call to AdviceRemoteDataSource', () {
+    test('when calling getRandomAdviceFromApi', () async {
+      // GIVEN
+      final mock = MockAdviceRemoteDataSource();
+      final adviceRepo = AdviceRepoImpl(adviceRemoteDataSource: mock);
+
+      // WHEN
+      await adviceRepo.getAdviceFromDataSource();
+
+      // THEN
+      verify(mock.getRandomAdviceFromApi()).called(1);
+      verifyNoMoreInteractions(mock);
     });
   });
 }
