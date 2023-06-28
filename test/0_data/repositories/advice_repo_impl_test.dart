@@ -42,14 +42,14 @@ void main() {
       });
     });
 
-    group('should make a single call', () {
-      test('when calling getRandomAdviceFromApi', () {
+    group('should make a single call to AdviceRemoteDataSource', () {
+      test('when calling getRandomAdviceFromApi', () async {
         // GIVEN
         final mock = MockAdviceRemoteDataSource();
         final adviceRepo = AdviceRepoImpl(adviceRemoteDataSource: mock);
 
         // WHEN
-        adviceRepo.getAdviceFromDataSource();
+        await adviceRepo.getAdviceFromDataSource();
 
         // THEN
         verify(mock.getRandomAdviceFromApi()).called(1);
