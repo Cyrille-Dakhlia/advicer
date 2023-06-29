@@ -20,6 +20,9 @@ void main() {
     final adviceRepoUnderTest =
         AdviceRepoImpl(adviceRemoteDataSource: mockAdviceRemoteDataSource);
 
+    // Since we're using the same mock instance accross the tests, we make sure there's no interference
+    setUp(() => reset(mockAdviceRemoteDataSource));
+
     group('should return left with an AdviceEntity', () {
       test('when AdviceRemoteDatasource returns an AdviceModel', () async {
         // GIVEN
@@ -87,20 +90,16 @@ void main() {
         expect(result, Right<AdviceEntity, Failure>(GeneralFailure()));
       });
     });
-  });
 
-  group('should make a single call to AdviceRemoteDataSource', () {
-    test('when calling getRandomAdviceFromApi', () async {
-      // GIVEN
-      final mock = MockAdviceRemoteDataSource();
-      final adviceRepo = AdviceRepoImpl(adviceRemoteDataSource: mock);
+    group('should make a single call to AdviceRemoteDataSource', () {
+      test('when calling getRandomAdviceFromApi', () async {
+        // WHEN
+        await adviceRepoUnderTest.getAdviceFromDataSource();
 
-      // WHEN
-      await adviceRepo.getAdviceFromDataSource();
-
-      // THEN
-      verify(mock.getRandomAdviceFromApi()).called(1);
-      verifyNoMoreInteractions(mock);
+        // THEN
+        verify(mockAdviceRemoteDataSource.getRandomAdviceFromApi()).called(1);
+        verifyNoMoreInteractions(mockAdviceRemoteDataSource);
+      });
     });
   });
 }

@@ -15,6 +15,9 @@ void main() {
     final mockAdviceRepo = MockAdviceRepo();
     final adviceUseCasesUnderTest = AdviceUseCases(adviceRepo: mockAdviceRepo);
 
+    // Since we're using the same mock instance accross the tests, we make sure there's no interference
+    setUp(() => reset(mockAdviceRepo));
+
     group('should return left with an AdviceEntity', () {
       test('when AdviceRepo returns left with an AdviceEntity', () async {
         // GIVEN
@@ -92,16 +95,12 @@ void main() {
 
     group('should make a single call to AdviceRepo', () {
       test('when calling getAdviceFromDataSource()', () async {
-        // GIVEN
-        final mock = MockAdviceRepo();
-        final adviceUseCases = AdviceUseCases(adviceRepo: mock);
-
         // WHEN
-        await adviceUseCases.getAdvice();
+        await adviceUseCasesUnderTest.getAdvice();
 
         // THEN
-        verify(mock.getAdviceFromDataSource()).called(1);
-        verifyNoMoreInteractions(mock);
+        verify(mockAdviceRepo.getAdviceFromDataSource()).called(1);
+        verifyNoMoreInteractions(mockAdviceRepo);
       });
     });
   });

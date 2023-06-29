@@ -16,6 +16,9 @@ void main() {
     final adviceRemoteDataSourceUnderTest =
         AdviceRemoteDataSourceImpl(client: mockClient);
 
+    // Since we're using the same mock instance accross the tests, we make sure there's no interference
+    setUp(() => reset(mockClient));
+
     group(
       'should return AdviceModel',
       () {
