@@ -35,7 +35,7 @@ void main() {
         final result = await adviceRepoUnderTest.getAdviceFromDataSource();
 
         // THEN
-        final expected = AdviceModel(
+        final expected = AdviceEntity(
           advice: inputAdviceModel.advice,
           id: inputAdviceModel.id,
         );

@@ -15,8 +15,9 @@ class AdviceRepoImpl implements AdviceRepo {
   Future<Either<AdviceEntity, Failure>> getAdviceFromDataSource() async {
     // we can check here if we have an Internet connection to choose the datasource (remote or local)
     try {
-      final advice = await _adviceRemoteDataSource.getRandomAdviceFromApi();
-      return left(advice);
+      final adviceModel =
+          await _adviceRemoteDataSource.getRandomAdviceFromApi();
+      return left(AdviceEntity(advice: adviceModel.advice, id: adviceModel.id));
     } on ServerException catch (_) {
       return right(ServerFailure());
     } on CacheException catch (_) {
