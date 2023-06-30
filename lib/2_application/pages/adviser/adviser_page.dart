@@ -20,6 +20,9 @@ class AdviserPageWrapperProvider extends StatelessWidget {
 }
 
 class AdviserPage extends StatelessWidget {
+  static const initialAdviceMessage =
+      'Press the button to get your first advice.';
+
   const AdviserPage({super.key});
 
   @override
@@ -48,7 +51,7 @@ class AdviserPage extends StatelessWidget {
                 child: BlocBuilder<AdviserBloc, AdviserState>(
                   builder: (context, state) => switch (state) {
                     AdviserInitial() => Text(
-                        'Press the button to get your first advice.',
+                        initialAdviceMessage,
                         style: themeData.textTheme.bodyMedium,
                       ),
                     AdviserLoadInProgress() => CircularProgressIndicator(
