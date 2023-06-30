@@ -4,6 +4,9 @@ class AdviceField extends StatelessWidget {
   final String advice;
   const AdviceField({super.key, required this.advice});
 
+  static const String backupAdvice =
+      'Sometimes the only advice you need is silence.';
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -18,7 +21,7 @@ class AdviceField extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: Text(
-            '''"$advice"''',
+            advice.isNotEmpty ? '"$advice"' : backupAdvice,
             style: themeData.textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
