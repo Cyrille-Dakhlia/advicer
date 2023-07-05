@@ -18,7 +18,6 @@ void setup() {
   // ! Data Layer
   getIt.registerFactory<AdviceRepo>(
       () => AdviceRepoImpl(adviceRemoteDataSource: getIt()));
-  // getIt.registerFactory(() => AdviceRepoImpl(adviceRemoteDataSource: getIt()));
   getIt.registerFactory<AdviceRemoteDataSource>(
       () => AdviceRemoteDataSourceImpl(client: getIt()));
 
