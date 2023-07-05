@@ -17,12 +17,12 @@ class AdviserBloc extends Bloc<AdviserEvent, AdviserState> {
 
   AdviserBloc({required AdviceUseCases adviceUseCases})
       : _adviceUseCases = adviceUseCases,
-        super(AdviserInitial()) {
+        super(const AdviserInitial()) {
     on<AdviserRequestPressed>(_onRequestPressed);
   }
 
   FutureOr<void> _onRequestPressed(event, emit) async {
-    emit(AdviserLoadInProgress());
+    emit(const AdviserLoadInProgress());
 
     final adviceEntityOrFailure = await _adviceUseCases.getAdvice();
     adviceEntityOrFailure.fold(
