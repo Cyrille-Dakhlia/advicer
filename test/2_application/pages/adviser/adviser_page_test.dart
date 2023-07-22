@@ -76,9 +76,13 @@ void main() {
           (widgetTester) async {
         // GIVEN
         const inputAdvice = 'Good';
+        const inputAdviceId = 3;
         whenListen(
           mockAdviserBloc,
-          Stream.fromIterable([const AdviserLoadSuccess(advice: inputAdvice)]),
+          Stream.fromIterable([
+            const AdviserLoadSuccess(
+                advice: inputAdvice, adviceId: inputAdviceId)
+          ]),
           initialState: const AdviserInitial(),
         );
 

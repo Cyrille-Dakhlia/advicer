@@ -13,6 +13,7 @@ void main() {
   group('AdviserBloc', () {
     final mockAdviceUseCases = MockAdviceUseCases();
     const inputAdvice = 'test';
+    const inputAdviceId = 3;
 
     // Since we're using the same mock instance accross the tests, we make sure there's no interference
     setUp(() => mocktail.reset(mockAdviceUseCases));
@@ -30,7 +31,7 @@ void main() {
         '[AdviserLoadInProgress, AdviserLoadSuccess] with the correct advice when AdviserRequestPressed is added and AdviceUseCases returns left with an AdviceEntity',
         setUp: () {
           const inputLeftAdviceEntity = Left<AdviceEntity, Failure>(
-              AdviceEntity(advice: inputAdvice, id: 1));
+              AdviceEntity(advice: inputAdvice, id: inputAdviceId));
           mocktail
               .when(() => mockAdviceUseCases.getAdvice())
               .thenAnswer((_) => Future.value(inputLeftAdviceEntity));
@@ -40,7 +41,7 @@ void main() {
         // wait: const Duration(seconds: 3), //* if operations in bloc take time, we might need to wait a little before executing the expect function
         expect: () => const <AdviserState>[
           AdviserLoadInProgress(),
-          AdviserLoadSuccess(advice: inputAdvice)
+          AdviserLoadSuccess(advice: inputAdvice, adviceId: inputAdviceId)
         ],
       );
 

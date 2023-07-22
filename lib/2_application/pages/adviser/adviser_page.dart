@@ -62,8 +62,8 @@ class AdviserPage extends StatelessWidget {
                     AdviserLoadSuccess(advice: var advice) =>
                       ClickableAdviceField(
                         advice: advice,
-                        onPressed: () =>
-                            debugPrint('hi here'), //todo: add relevant function
+                        onPressed: () => debugPrint(
+                            'hi here advice n°${state.adviceId}'), //todo: add relevant function
                       ),
                   },
                 ),
