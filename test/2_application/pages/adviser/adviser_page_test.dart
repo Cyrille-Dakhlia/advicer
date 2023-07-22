@@ -1,7 +1,7 @@
 import 'package:adviser/2_application/core/services/theme_service.dart';
 import 'package:adviser/2_application/pages/adviser/adviser_page.dart';
 import 'package:adviser/2_application/pages/adviser/bloc/adviser_bloc.dart';
-import 'package:adviser/2_application/pages/adviser/widgets/advice_field.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/clickable_advice_field.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/error_message.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -89,11 +89,12 @@ void main() {
         await widgetTester.pump();
 
         // THEN
-        final adviceFieldFinder = find.byType(AdviceField);
-        expect(adviceFieldFinder, findsOneWidget);
+        final clickableAdviceFieldFinder = find.byType(ClickableAdviceField);
+        expect(clickableAdviceFieldFinder, findsOneWidget);
 
-        final adviceText =
-            widgetTester.widget<AdviceField>(adviceFieldFinder).advice;
+        final adviceText = widgetTester
+            .widget<ClickableAdviceField>(clickableAdviceFieldFinder)
+            .advice;
         expect(adviceText, inputAdvice);
       });
 

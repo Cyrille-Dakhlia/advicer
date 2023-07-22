@@ -1,6 +1,6 @@
 import 'package:adviser/2_application/core/services/theme_service.dart';
 import 'package:adviser/2_application/pages/adviser/bloc/adviser_bloc.dart';
-import 'package:adviser/2_application/pages/adviser/widgets/advice_field.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/clickable_advice_field.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/custom_button.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/error_message.dart';
 import 'package:adviser/injection.dart';
@@ -57,10 +57,14 @@ class AdviserPage extends StatelessWidget {
                     AdviserLoadInProgress() => CircularProgressIndicator(
                         color: themeData.colorScheme.secondary,
                       ),
-                    AdviserLoadSuccess(advice: var advice) =>
-                      AdviceField(advice: advice),
                     AdviserLoadFailure(message: var message) =>
                       ErrorMessage(message: message),
+                    AdviserLoadSuccess(advice: var advice) =>
+                      ClickableAdviceField(
+                        advice: advice,
+                        onPressed: () =>
+                            debugPrint('hi here'), //todo: add relevant function
+                      ),
                   },
                 ),
               ),
