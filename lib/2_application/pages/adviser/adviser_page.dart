@@ -19,7 +19,7 @@ class AdviserPageWrapperProvider extends StatelessWidget {
           create: (_) => getIt<AdviserBloc>(),
         ),
         BlocProvider(
-          create: (_) => FavoritesBloc(), //todo: add to getIt
+          create: (_) => getIt<FavoritesBloc>(),
         ),
       ],
       child: const AdviserPage(),
