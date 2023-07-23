@@ -1,6 +1,6 @@
 import 'package:adviser/2_application/core/blocs/favorites_bloc/favorites_bloc.dart';
 import 'package:adviser/2_application/core/services/theme_service.dart';
-import 'package:adviser/2_application/core/widgets/advice_field.dart';
+import 'package:adviser/2_application/pages/favorites/widgets/dismissible_advice_field.dart';
 import 'package:adviser/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +31,13 @@ class FavoritesPage extends StatelessWidget {
           bloc: getIt<FavoritesBloc>(),
           builder: (context, state) {
             return ListView.separated(
-                itemBuilder: (context, index) =>
-                    AdviceField(advice: state.favorites[index].advice),
+                itemBuilder: (context, index) {
+                  var favorite = state.favorites[index];
+                  return DismissibleAdviceField(
+                    advice: favorite.advice,
+                    adviceId: favorite.id,
+                  );
+                },
                 separatorBuilder: (_, __) => const Divider(
                       height: 30,
                       indent: 20,
