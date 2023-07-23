@@ -1,3 +1,4 @@
+import 'package:adviser/2_application/core/blocs/favorites_bloc/favorites_bloc.dart';
 import 'package:adviser/2_application/core/services/theme_service.dart';
 import 'package:adviser/2_application/pages/adviser/bloc/adviser_bloc.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/clickable_advice_field.dart';
@@ -12,8 +13,15 @@ class AdviserPageWrapperProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AdviserBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<AdviserBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => FavoritesBloc(), //todo: add to getIt
+        ),
+      ],
       child: const AdviserPage(),
     );
   }
@@ -59,11 +67,26 @@ class AdviserPage extends StatelessWidget {
                       ),
                     AdviserLoadFailure(message: var message) =>
                       ErrorMessage(message: message),
-                    AdviserLoadSuccess(advice: var advice) =>
-                      ClickableAdviceField(
-                        advice: advice,
-                        onPressed: () => debugPrint(
-                            'hi here advice n°${state.adviceId}'), //todo: add relevant function
+                    AdviserLoadSuccess(
+                      advice: var advice,
+                      adviceId: var adviceId
+                    ) =>
+                      BlocBuilder<FavoritesBloc, FavoritesState>(
+                        builder: (context, favoritesState) {
+                          final isFavorite = favoritesState.favorites
+                              .any((advice) => advice.id == adviceId);
+                          return ClickableAdviceField(
+                            isFavorite: isFavorite,
+                            advice: advice,
+                            onPressed: () => context.read<FavoritesBloc>().add(
+                                  (!isFavorite)
+                                      ? FavoritesAdviceAdded(
+                                          advice: advice, adviceId: adviceId)
+                                      : FavoritesAdviceRemoved(
+                                          advice: advice, adviceId: adviceId),
+                                ),
+                          );
+                        },
                       ),
                   },
                 ),
