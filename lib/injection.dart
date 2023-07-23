@@ -10,19 +10,20 @@ import 'package:http/http.dart' as http;
 final getIt = GetIt.instance;
 
 void setup() {
-  // ! Application Layer
-  getIt.registerFactory(() => AdviserBloc(adviceUseCases: getIt()));
-  getIt.registerSingleton(FavoritesBloc());
+  // ! External
+  getIt.registerFactory(() => http.Client());
+
+  // ! Data Layer
+  getIt.registerFactory<AdviceRemoteDataSource>(
+      () => AdviceRemoteDataSourceImpl(client: getIt()));
+  getIt.registerFactory<AdviceRepo>(
+      () => AdviceRepoImpl(adviceRemoteDataSource: getIt()));
 
   // ! Domain Layer
   getIt.registerFactory(() => AdviceUseCases(adviceRepo: getIt()));
 
-  // ! Data Layer
-  getIt.registerFactory<AdviceRepo>(
-      () => AdviceRepoImpl(adviceRemoteDataSource: getIt()));
-  getIt.registerFactory<AdviceRemoteDataSource>(
-      () => AdviceRemoteDataSourceImpl(client: getIt()));
-
-  // ! External
-  getIt.registerFactory(() => http.Client());
+  // ! Application Layer
+  getIt.registerFactory(() => AdviserBloc(adviceUseCases: getIt()));
+  //NOTE:XXX: the registration order matters when registering Singleton (probably not lazy instanciation because it needs AdviceUseCases to be already registered)
+  getIt.registerSingleton(FavoritesBloc(adviceUseCases: getIt()));
 }

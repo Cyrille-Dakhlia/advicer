@@ -26,7 +26,7 @@ class FavoritesPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 50, right: 50, top: 20),
-        //todo: add BlocListener to show snackbar if success or failure
+        //TODO: add BlocListener to show snackbar if success or failure
         child: BlocBuilder<FavoritesBloc, FavoritesState>(
           bloc: getIt<FavoritesBloc>(),
           builder: (context, state) {
