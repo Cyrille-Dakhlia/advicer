@@ -24,6 +24,9 @@ final class FavoritesAddSuccess extends FavoritesState {
 final class FavoritesAddFailure extends FavoritesState {
   final String message;
   const FavoritesAddFailure({required super.favorites, required this.message});
+
+  @override
+  List<Object> get props => [...super.props, message];
 }
 
 final class FavoritesRemoveInProgress extends FavoritesState {
@@ -38,4 +41,7 @@ final class FavoritesRemoveFailure extends FavoritesState {
   final String message;
   const FavoritesRemoveFailure(
       {required super.favorites, required this.message});
+
+  @override
+  List<Object> get props => [...super.props, message];
 }
