@@ -4,6 +4,7 @@ import 'package:adviser/2_application/pages/adviser/bloc/adviser_bloc.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/clickable_advice_field.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/custom_button.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/error_message.dart';
+import 'package:adviser/2_application/pages/favorites/favorites_page.dart';
 import 'package:adviser/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,13 @@ class AdviserPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FavoritesPage(),
+                  )),
+              icon: const Icon(Icons.favorite)),
           Switch(
             value: context.watch<ThemeService>().isDarkModeOn,
             onChanged: (_) => context.read<ThemeService>().toggleTheme(),
