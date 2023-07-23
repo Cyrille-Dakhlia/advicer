@@ -2,14 +2,14 @@ import 'package:adviser/2_application/core/widgets/advice_field.dart';
 import 'package:flutter/material.dart';
 
 class ClickableAdviceField extends StatelessWidget {
-  ClickableAdviceField(
+  const ClickableAdviceField(
       {super.key,
       required this.advice,
       this.isFavorite = false,
       required this.onPressed});
   final String advice;
-  bool isFavorite;
-  void Function() onPressed;
+  final bool isFavorite;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
