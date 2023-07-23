@@ -4,6 +4,7 @@ import 'package:adviser/1_domain/entities/advice_entity.dart';
 import 'package:adviser/1_domain/failures/failures.dart';
 import 'package:adviser/1_domain/repositories/advice_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class AdviceRepoImpl implements AdviceRepo {
   final AdviceRemoteDataSource _adviceRemoteDataSource;
@@ -25,5 +26,14 @@ class AdviceRepoImpl implements AdviceRepo {
     } catch (_) {
       return right(GeneralFailure());
     }
+  }
+
+  @override
+  Future<bool> updateFavoritesInDataSource(
+      List<AdviceEntity> updatedList) async {
+    debugPrint('Faking server request: Updating favorites.');
+    await Future.delayed(const Duration(seconds: 3));
+    debugPrint('Faking server response: Favorites updated.');
+    return true; //TODO: implement saveFavoritesToDataSource
   }
 }

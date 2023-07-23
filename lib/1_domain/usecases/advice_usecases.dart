@@ -12,4 +12,8 @@ class AdviceUseCases {
     // business logic should be done here
     return _adviceRepo.getAdviceFromDataSource();
   }
+
+  Future<bool> updateFavoritesInDataSource(List<AdviceEntity> updatedList) {
+    return _adviceRepo.updateFavoritesInDataSource(updatedList);
+  }
 }

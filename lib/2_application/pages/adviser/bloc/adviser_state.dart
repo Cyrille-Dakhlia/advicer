@@ -17,10 +17,11 @@ final class AdviserLoadInProgress extends AdviserState {
 
 final class AdviserLoadSuccess extends AdviserState {
   final String advice;
-  const AdviserLoadSuccess({required this.advice});
+  final int adviceId;
+  const AdviserLoadSuccess({required this.advice, required this.adviceId});
 
   @override
-  List<Object?> get props => [advice];
+  List<Object?> get props => [advice, adviceId];
 }
 
 final class AdviserLoadFailure extends AdviserState {

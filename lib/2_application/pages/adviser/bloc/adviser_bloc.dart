@@ -26,7 +26,8 @@ class AdviserBloc extends Bloc<AdviserEvent, AdviserState> {
 
     final adviceEntityOrFailure = await _adviceUseCases.getAdvice();
     adviceEntityOrFailure.fold(
-      (adviceEntity) => emit(AdviserLoadSuccess(advice: adviceEntity.advice)),
+      (adviceEntity) => emit(AdviserLoadSuccess(
+          advice: adviceEntity.advice, adviceId: adviceEntity.id)),
       (failure) =>
           emit(AdviserLoadFailure(message: _mapFailureToMessage(failure))),
     );

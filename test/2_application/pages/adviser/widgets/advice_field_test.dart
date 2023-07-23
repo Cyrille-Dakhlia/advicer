@@ -1,4 +1,4 @@
-import 'package:adviser/2_application/pages/adviser/widgets/advice_field.dart';
+import 'package:adviser/2_application/core/widgets/advice_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

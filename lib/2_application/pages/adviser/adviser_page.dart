@@ -1,8 +1,10 @@
+import 'package:adviser/2_application/core/blocs/favorites_bloc/favorites_bloc.dart';
 import 'package:adviser/2_application/core/services/theme_service.dart';
 import 'package:adviser/2_application/pages/adviser/bloc/adviser_bloc.dart';
-import 'package:adviser/2_application/pages/adviser/widgets/advice_field.dart';
+import 'package:adviser/2_application/pages/adviser/widgets/clickable_advice_field.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/custom_button.dart';
 import 'package:adviser/2_application/pages/adviser/widgets/error_message.dart';
+import 'package:adviser/2_application/pages/favorites/favorites_page.dart';
 import 'package:adviser/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +14,15 @@ class AdviserPageWrapperProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AdviserBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<AdviserBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<FavoritesBloc>(),
+        ),
+      ],
       child: const AdviserPage(),
     );
   }
@@ -36,6 +45,13 @@ class AdviserPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FavoritesPage(),
+                  )),
+              icon: const Icon(Icons.favorite)),
           Switch(
             value: context.watch<ThemeService>().isDarkModeOn,
             onChanged: (_) => context.read<ThemeService>().toggleTheme(),
@@ -57,10 +73,29 @@ class AdviserPage extends StatelessWidget {
                     AdviserLoadInProgress() => CircularProgressIndicator(
                         color: themeData.colorScheme.secondary,
                       ),
-                    AdviserLoadSuccess(advice: var advice) =>
-                      AdviceField(advice: advice),
                     AdviserLoadFailure(message: var message) =>
                       ErrorMessage(message: message),
+                    AdviserLoadSuccess(
+                      advice: var advice,
+                      adviceId: var adviceId
+                    ) =>
+                      BlocBuilder<FavoritesBloc, FavoritesState>(
+                        builder: (context, favoritesState) {
+                          final isFavorite = favoritesState.favorites
+                              .any((advice) => advice.id == adviceId);
+                          return ClickableAdviceField(
+                            isFavorite: isFavorite,
+                            advice: advice,
+                            onPressed: () => context.read<FavoritesBloc>().add(
+                                  (!isFavorite)
+                                      ? FavoritesAdviceAdded(
+                                          advice: advice, adviceId: adviceId)
+                                      : FavoritesAdviceRemoved(
+                                          advice: advice, adviceId: adviceId),
+                                ),
+                          );
+                        },
+                      ),
                   },
                 ),
               ),
