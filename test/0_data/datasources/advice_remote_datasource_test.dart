@@ -1,16 +1,16 @@
-import 'package:adviser/0_data/datasources/advice_remote_datasource.dart';
-import 'package:adviser/0_data/exceptions/exceptions.dart';
-import 'package:adviser/0_data/models/advice_model.dart';
-import 'package:adviser/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+// import 'package:adviser/0_data/datasources/advice_remote_datasource.dart';
+// import 'package:adviser/0_data/exceptions/exceptions.dart';
+// import 'package:adviser/0_data/models/advice_model.dart';
+// import 'package:adviser/firebase_options.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter/material.dart';
+// import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:http/http.dart' as http;
 
-import 'advice_remote_datasource_test.mocks.dart';
+// import 'advice_remote_datasource_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<http.Client>()])
 Future<void> main() async {

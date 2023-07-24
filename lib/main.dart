@@ -1,11 +1,11 @@
 import 'package:adviser/2_application/core/services/theme_service.dart';
 import 'package:adviser/2_application/pages/adviser/adviser_page.dart';
-import 'package:adviser/firebase_options.dart';
 import 'package:adviser/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:adviser/injection.dart' as di;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:adviser/firebase_options.dart'; //TODO: make sure you put your own firebase_options.dart file associated to your Firebase Project
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
