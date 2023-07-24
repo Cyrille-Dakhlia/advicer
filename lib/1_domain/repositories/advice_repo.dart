@@ -6,4 +6,6 @@ abstract class AdviceRepo {
   Future<Either<AdviceEntity, Failure>> getAdviceFromDataSource();
 
   Future<bool> updateFavoritesInDataSource(List<AdviceEntity> updatedList);
+
+  Future<List<AdviceEntity>> getFavoritesFromDataSource();
 }

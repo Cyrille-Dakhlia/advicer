@@ -12,7 +12,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({required AdviceUseCases adviceUseCases})
       : _adviceUseCases = adviceUseCases,
         super(const FavoritesInitial(favorites: [])) {
-    //TODO: initialize with datasource
+    on<FavoritesInitialDataLoadStarted>(_onInitialDataLoadStarted);
     on<FavoritesAdviceAdded>(_onAdviceAdded,
         transformer:
             sequential()); //* To avoid user to add multiple times the same advice as favorite before the UI updates, we could use droppable() to drop successive event, but instead we use sequential() and treat duplicate events in the _onAdviceAdded method in the case where the user browses rapidly many advices and adds them all to favorites
@@ -22,6 +22,14 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   }
 
   final AdviceUseCases _adviceUseCases;
+
+  Future<FutureOr<void>> _onInitialDataLoadStarted(
+      FavoritesInitialDataLoadStarted event, emit) async {
+    emit(FavoritesInitialLoadInProgress(favorites: state.favorites));
+    final loadedFavorites = await _adviceUseCases.getFavoritesFromDataSource();
+    emit(FavoritesInitialLoadSuccess(favorites: loadedFavorites));
+    //TODO: if catch Failure, emit FavoritesInitialLoadFailure
+  }
 
   Future<FutureOr<void>> _onAdviceAdded(
       FavoritesAdviceAdded event, emit) async {

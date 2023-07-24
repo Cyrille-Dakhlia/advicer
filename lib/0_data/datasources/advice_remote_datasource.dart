@@ -14,6 +14,8 @@ abstract class AdviceRemoteDataSource {
   Future<AdviceModel> getRandomAdviceFromApi();
 
   Future<bool> updateFavoritesInDatabase(List<AdviceModel> updatedList);
+
+  Future<List<AdviceModel>> getFavoritesFromDataSource();
 }
 
 const apiUri = 'https://api.flutter-community.com/api/v1/advice';
@@ -56,5 +58,17 @@ class AdviceRemoteDataSourceImpl implements AdviceRemoteDataSource {
       debugPrint('Error updating document $e'); //TODO: remove
       return false;
     });
+  }
+
+  @override
+  Future<List<AdviceModel>> getFavoritesFromDataSource() async {
+    debugPrint('Fake server request: load initial data');
+    // TODO: make real call to Firestore
+    await Future.delayed(const Duration(seconds: 2));
+    debugPrint('Fake server response: initial data loaded');
+    return List<AdviceModel>.of([
+      const AdviceModel(advice: 'a', id: 0),
+      const AdviceModel(advice: 'b', id: 1),
+    ]);
   }
 }

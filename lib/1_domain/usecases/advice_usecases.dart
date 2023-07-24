@@ -16,4 +16,8 @@ class AdviceUseCases {
   Future<bool> updateFavoritesInDataSource(List<AdviceEntity> updatedList) {
     return _adviceRepo.updateFavoritesInDataSource(updatedList);
   }
+
+  Future<List<AdviceEntity>> getFavoritesFromDataSource() {
+    return _adviceRepo.getFavoritesFromDataSource();
+  }
 }

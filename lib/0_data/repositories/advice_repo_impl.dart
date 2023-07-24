@@ -5,6 +5,7 @@ import 'package:adviser/1_domain/entities/advice_entity.dart';
 import 'package:adviser/1_domain/failures/failures.dart';
 import 'package:adviser/1_domain/repositories/advice_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class AdviceRepoImpl implements AdviceRepo {
   final AdviceRemoteDataSource _adviceRemoteDataSource;
@@ -34,5 +35,21 @@ class AdviceRepoImpl implements AdviceRepo {
     return await _adviceRemoteDataSource.updateFavoritesInDatabase(updatedList
         .map((ae) => AdviceModel(advice: ae.advice, id: ae.id))
         .toList());
+    //TODO: handle exceptions
+  }
+
+  @override
+  Future<List<AdviceEntity>> getFavoritesFromDataSource() async {
+    try {
+      final adviceModelList =
+          await _adviceRemoteDataSource.getFavoritesFromDataSource();
+      return adviceModelList
+          .map((am) => AdviceEntity(advice: am.advice, id: am.id))
+          .toList();
+    } on Exception catch (e) {
+      // TODO: handle exceptions
+      debugPrint(e.toString());
+      return List<AdviceEntity>.empty();
+    }
   }
 }

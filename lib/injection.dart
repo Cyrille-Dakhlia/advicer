@@ -27,5 +27,6 @@ void setup() {
   // ! Application Layer
   getIt.registerFactory(() => AdviserBloc(adviceUseCases: getIt()));
   //NOTE:XXX: the registration order matters when registering Singleton (probably not lazy instanciation because it needs AdviceUseCases to be already registered)
-  getIt.registerSingleton(FavoritesBloc(adviceUseCases: getIt()));
+  getIt.registerSingleton(FavoritesBloc(adviceUseCases: getIt())
+    ..add(FavoritesInitialDataLoadStarted()));
 }
