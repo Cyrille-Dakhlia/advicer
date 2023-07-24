@@ -21,6 +21,7 @@ abstract class AdviceRemoteDataSource {
 const apiUri = 'https://api.flutter-community.com/api/v1/advice';
 const advicesCollection = 'advices';
 const favoritesDocument = 'favorites';
+// TODO: add in README (just for info) the Firestore structure of the collection (if it isn't defined, the first call of updateFavoritesInDatabase will create the collection ; if we ask to retrieve the favorites when the collection doesn't exist, an empty list is simply returned when calling getFavoritesFromDataSource)
 
 class AdviceRemoteDataSourceImpl implements AdviceRemoteDataSource {
   final http.Client _client;
@@ -47,7 +48,7 @@ class AdviceRemoteDataSourceImpl implements AdviceRemoteDataSource {
 
   @override
   Future<bool> updateFavoritesInDatabase(List<AdviceModel> updatedList) async {
-    return _db
+    return await _db
         .collection(advicesCollection)
         .doc(favoritesDocument)
         .set({'list': updatedList.map((am) => am.toFirestore()).toList()}).then(
@@ -62,13 +63,27 @@ class AdviceRemoteDataSourceImpl implements AdviceRemoteDataSource {
 
   @override
   Future<List<AdviceModel>> getFavoritesFromDataSource() async {
-    debugPrint('Fake server request: load initial data');
-    // TODO: make real call to Firestore
-    await Future.delayed(const Duration(seconds: 2));
-    debugPrint('Fake server response: initial data loaded');
-    return List<AdviceModel>.of([
-      const AdviceModel(advice: 'a', id: 0),
-      const AdviceModel(advice: 'b', id: 1),
-    ]);
+    return await _db
+        .collection(advicesCollection)
+        .doc(favoritesDocument)
+        .get()
+        .then((doc) {
+      final data = doc.data();
+
+      if (data == null) {
+        return []; //TODO: handle case where favoritesList is null (return Failure)
+      }
+
+      final dataList = List<Map<String, dynamic>>.from(data['list']);
+
+      final List<AdviceModel> favoritesList = dataList
+          .map((element) =>
+              AdviceModel(advice: element['advice'], id: element['adviceId']))
+          .toList();
+
+      return favoritesList;
+    }, onError: (e) {
+      return []; //TODO: handle errors (return Failure)
+    });
   }
 }
