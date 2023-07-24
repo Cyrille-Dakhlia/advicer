@@ -22,9 +22,12 @@ const favoritesDocument = 'favorites';
 
 class AdviceRemoteDataSourceImpl implements AdviceRemoteDataSource {
   final http.Client _client;
-  final _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db;
 
-  AdviceRemoteDataSourceImpl({required http.Client client}) : _client = client;
+  AdviceRemoteDataSourceImpl(
+      {required http.Client client, required FirebaseFirestore firestore})
+      : _client = client,
+        _db = firestore;
 
   @override
   Future<AdviceModel> getRandomAdviceFromApi() async {
