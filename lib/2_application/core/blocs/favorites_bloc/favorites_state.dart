@@ -13,6 +13,18 @@ final class FavoritesInitial extends FavoritesState {
   const FavoritesInitial({required super.favorites});
 }
 
+final class FavoritesInitialLoadInProgress extends FavoritesState {
+  const FavoritesInitialLoadInProgress({required super.favorites});
+}
+
+final class FavoritesInitialLoadSuccess extends FavoritesState {
+  const FavoritesInitialLoadSuccess({required super.favorites});
+}
+
+final class FavoritesInitialLoadFailure extends FavoritesState {
+  const FavoritesInitialLoadFailure({required super.favorites});
+}
+
 final class FavoritesAddInProgress extends FavoritesState {
   const FavoritesAddInProgress({required super.favorites});
 }

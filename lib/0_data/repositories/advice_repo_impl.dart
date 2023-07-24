@@ -1,5 +1,6 @@
 import 'package:adviser/0_data/datasources/advice_remote_datasource.dart';
 import 'package:adviser/0_data/exceptions/exceptions.dart';
+import 'package:adviser/0_data/models/advice_model.dart';
 import 'package:adviser/1_domain/entities/advice_entity.dart';
 import 'package:adviser/1_domain/failures/failures.dart';
 import 'package:adviser/1_domain/repositories/advice_repo.dart';
@@ -31,9 +32,24 @@ class AdviceRepoImpl implements AdviceRepo {
   @override
   Future<bool> updateFavoritesInDataSource(
       List<AdviceEntity> updatedList) async {
-    debugPrint('Faking server request: Updating favorites.');
-    await Future.delayed(const Duration(seconds: 3));
-    debugPrint('Faking server response: Favorites updated.');
-    return true; //TODO: implement saveFavoritesToDataSource
+    return await _adviceRemoteDataSource.updateFavoritesInDatabase(updatedList
+        .map((ae) => AdviceModel(advice: ae.advice, id: ae.id))
+        .toList());
+    //TODO: handle exceptions
+  }
+
+  @override
+  Future<List<AdviceEntity>> getFavoritesFromDataSource() async {
+    try {
+      final adviceModelList =
+          await _adviceRemoteDataSource.getFavoritesFromDataSource();
+      return adviceModelList
+          .map((am) => AdviceEntity(advice: am.advice, id: am.id))
+          .toList();
+    } on Exception catch (e) {
+      // TODO: handle exceptions
+      debugPrint(e.toString());
+      return List<AdviceEntity>.empty();
+    }
   }
 }

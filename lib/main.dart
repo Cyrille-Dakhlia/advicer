@@ -4,9 +4,13 @@ import 'package:adviser/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:adviser/injection.dart' as di;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:adviser/firebase_options.dart'; //TODO: make sure you put your own firebase_options.dart file associated to your Firebase Project
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   di.setup();
 
   runApp(ChangeNotifierProvider(
