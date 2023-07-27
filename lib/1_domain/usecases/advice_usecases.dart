@@ -20,4 +20,20 @@ class AdviceUseCases {
   Future<List<AdviceEntity>> getFavoritesFromDataSource() {
     return _adviceRepo.getFavoritesFromDataSource();
   }
+
+  bool checkIfAdviceAlreadyInFavorites(
+      int newAdviceId, List<AdviceEntity> favorites) {
+    return favorites.any((advice) => advice.id == newAdviceId);
+  }
+
+  List<AdviceEntity> addAdviceToFavorites(
+      AdviceEntity newAdvice, List<AdviceEntity> favorites) {
+    return [...favorites, newAdvice];
+  }
+
+  List<AdviceEntity> removeFromFavorites(
+      int adviceId, List<AdviceEntity> favorites) {
+    favorites.removeWhere((advice) => advice.id == adviceId);
+    return List.from(favorites);
+  }
 }

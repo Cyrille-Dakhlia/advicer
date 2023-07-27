@@ -8,6 +8,13 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 part 'favorites_event.dart';
 part 'favorites_state.dart';
 
+const adviceAlreadyInFavoritesFailureMessage =
+    'Error message, advice already in favorites.';
+const additionFailureMessage =
+    'Error message, advice not added, something went bad...';
+const removalFailureMessage =
+    'Error message, advice not removed, something went bad...';
+
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({required AdviceUseCases adviceUseCases})
       : _adviceUseCases = adviceUseCases,
@@ -35,16 +42,16 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       FavoritesAdviceAdded event, emit) async {
     emit(FavoritesAddInProgress(favorites: state.favorites));
 
-    if (state.favorites.any((advice) => advice.id == event.adviceId)) {
+    if (_adviceUseCases.checkIfAdviceAlreadyInFavorites(
+        event.adviceId, state.favorites)) {
       //HACK: We handle duplicate events here since we treat events sequentially (cf. transformer function applied on "on<Event>()"), in the case where the user would try to add multiple times the same advice to favorites before the UI updates
       emit(FavoritesAddFailure(
           favorites: state.favorites,
-          message: 'Error message, advice already in favorites.'));
+          message: adviceAlreadyInFavoritesFailureMessage));
     } else {
-      final updatedList = [
-        ...state.favorites,
-        AdviceEntity(advice: event.advice, id: event.adviceId),
-      ];
+      final updatedList = _adviceUseCases.addAdviceToFavorites(
+          AdviceEntity(advice: event.advice, id: event.adviceId),
+          state.favorites);
 
       bool dataUpdated =
           await _adviceUseCases.updateFavoritesInDataSource(updatedList);
@@ -55,8 +62,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       } else {
         //TODO: later, handle offline feature with SharedPreferences to save data on device until Internet connection gets activated to save data on remote datasource
         emit(FavoritesAddFailure(
-            favorites: state.favorites,
-            message: 'Error message, advice not added, something went bad...'));
+            favorites: state.favorites, message: additionFailureMessage));
       }
     }
   }
@@ -65,9 +71,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       FavoritesAdviceRemoved event, emit) async {
     emit(FavoritesRemoveInProgress(favorites: state.favorites));
 
-    var updatedList = List<AdviceEntity>.from(state.favorites);
-    // state.favorites.removeWhere((advice) => advice.id == event.adviceId);
-    updatedList.removeWhere((advice) => advice.id == event.adviceId);
+    final updatedList =
+        _adviceUseCases.removeFromFavorites(event.adviceId, state.favorites);
 
     bool dataUpdated =
         await _adviceUseCases.updateFavoritesInDataSource(updatedList);
@@ -78,8 +83,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     } else {
       //TODO: later, handle offline feature with SharedPreferences to save data on device until Internet connection gets activated to save data on remote datasource
       emit(FavoritesRemoveFailure(
-          favorites: state.favorites,
-          message: 'Error message, advice not removed, something went bad...'));
+          favorites: state.favorites, message: removalFailureMessage));
     }
   }
 }
